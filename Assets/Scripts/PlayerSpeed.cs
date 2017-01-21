@@ -9,7 +9,7 @@ public class PlayerSpeed : MonoBehaviour {
     private bool accelerated;
     private float originalSpeed;
 
-    private void Start()
+    void Start()
     {
         accelerated = false;
         timeCounter = 0.0f;
@@ -23,19 +23,27 @@ public class PlayerSpeed : MonoBehaviour {
             if(timeCounter >= accelerationSeconds)
             {
                 accelerated = false;
-                PlayerController.speed = originalSpeed;
+                Parallax.speed = originalSpeed;
                 timeCounter = 0.0f;
             }
         }
 	}
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("Entro en método de colisión");
         if (!accelerated && collision.gameObject.tag.Equals("PickupSpeed"))
         {
-            accelerated = true;
-            originalSpeed = PlayerController.speed;
-            PlayerController.speed = speedMultiplier;
+            Collission();
+            collision.gameObject.SetActive(false);
         }
+    }
+
+    public void Collission()
+    {
+        Debug.Log("Hay colisión");
+        accelerated = true;
+        originalSpeed = Parallax.speed;
+        Parallax.speed = originalSpeed * speedMultiplier;
     }
 }
