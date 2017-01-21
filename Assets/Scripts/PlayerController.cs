@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
     private static Rigidbody2D _rigidBody;
     private static float _force = 5;
     private static bool jump = false;
+    public static float speed { get; set; }
 
     public void Awake()
     {
