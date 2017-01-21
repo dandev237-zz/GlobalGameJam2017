@@ -8,8 +8,8 @@ public class ButtonPressEffect : MonoBehaviour
 
     public void Awake()
     {
-        pressed = (Sprite)Resources.Load<Sprite>("Sprites/buttonPressed");
-        button = (Sprite)Resources.Load<Sprite>("Sprites/button");
+        pressed = Resources.Load<Sprite>("Sprites/buttonPressed");
+        button = Resources.Load<Sprite>("Sprites/button");
         rend = this.GetComponent<SpriteRenderer>();
     }
 
