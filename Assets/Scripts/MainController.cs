@@ -15,19 +15,14 @@ public class MainController : MonoBehaviour
 
     public void LoadGame()
     {
-        SceneManager.LoadScene("Game");
-    }
-
-    public void ShowHowToPlay()
-    {
         panelMain.SetActive(false);
         panelHow.SetActive(true);
+        Invoke("LoadSceneGame", 5);
     }
 
-    public void BackToMain()
+    private void LoadSceneGame()
     {
-        panelHow.SetActive(false);
-        panelMain.SetActive(true);
+        SceneManager.LoadScene("Game");
     }
 
 }
