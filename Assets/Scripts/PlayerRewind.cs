@@ -6,24 +6,46 @@ public class PlayerRewind : MonoBehaviour {
 
     public GameObject player;
     public float rewindDistance;
+    private bool rewinding, jumping;
     private Stack<PlayerPosition> recordedPositions;
 
 	void Start () {
         recordedPositions = new Stack<PlayerPosition>();
+        rewinding = false;
+        jumping = false;
 	}
-	
-    public void RecordPosition(bool isAccelerated)
+
+    private void Update()
     {
-        PlayerPosition positionToRecord = new PlayerPosition(player.transform, isAccelerated);
+        if (!rewinding)
+        {
+            if (Input.GetKeyDown(KeyCode.Space) && !jumping)
+            {
+                jumping = true;
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!rewinding && jumping && collision.gameObject.tag.Equals("Ground"))
+        {
+            jumping = false;
+            RecordPosition(player.transform, PlayerController.speed);
+        }
+    }
+
+    private void RecordPosition(Transform playerTransform, float playerSpeed)
+    {
+        PlayerPosition positionToRecord = new PlayerPosition(playerTransform, playerSpeed);
         recordedPositions.Push(positionToRecord);
     }
 
-    public void Rewind()
+    private void Rewind()
     {
         bool keepLooking = true;
         float distanceRewinded = 0.0f;
 
-        List<Vector2> rewindVectors = new List<Vector2>();
         if(recordedPositions.Count > 0)
         {
             while (recordedPositions.Count > 0 && keepLooking)
@@ -45,13 +67,10 @@ public class PlayerRewind : MonoBehaviour {
                     Vector2 rewindVector = new Vector2(player.transform.position.x - recordedPosition.GetPosition().x, player.transform.position.y);
 
                     //Translate the player
-                    player.transform.Translate(rewindVector * Time.deltaTime); //CONSIDER SPEED
+                    player.transform.Translate(rewindVector * Time.deltaTime * recordedPosition.GetSpeed()); //CONSIDER SPEED
 
-                    //Get the landing point for the jump
-                    PlayerPosition landingPoint = recordedPositions.Pop();
-
-                    //Jump from player point to landing point with curvilinear trajectory
-                    //TODO
+                    //Issue a jump command
+                    PlayerController.Jump();
                 }
             }
         }
@@ -68,12 +87,12 @@ public class PlayerRewind : MonoBehaviour {
     struct PlayerPosition
     {
         Vector2 position;
-        bool isAccelerated;
+        float speed;
 
-        public PlayerPosition(Transform playerTransform, bool accelerated)
+        public PlayerPosition(Transform playerTransform, float playerSpeed)
         {
             position = playerTransform.position;
-            isAccelerated = accelerated;
+            speed = playerSpeed;
         }
 
         public Vector2 GetPosition()
@@ -81,9 +100,9 @@ public class PlayerRewind : MonoBehaviour {
             return position;
         }
 
-        public bool GetIsAccelerated()
+        public float GetSpeed()
         {
-            return isAccelerated;
+            return speed;
         }
     }
 }
