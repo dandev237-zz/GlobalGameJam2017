@@ -33,6 +33,10 @@ public class PlayerRewind : MonoBehaviour {
             jumping = false;
             RecordPosition(player.transform, PlayerController.speed);
         }
+        else if(!rewinding && !jumping && collision.gameObject.tag.Equals("PickupRewind"))
+        {
+            Rewind();
+        }
     }
 
     private void RecordPosition(Transform playerTransform, float playerSpeed)
@@ -43,6 +47,8 @@ public class PlayerRewind : MonoBehaviour {
 
     private void Rewind()
     {
+        rewinding = true;
+
         bool keepLooking = true;
         float distanceRewinded = 0.0f;
 
@@ -82,6 +88,8 @@ public class PlayerRewind : MonoBehaviour {
 
         //Empty the stack
         recordedPositions.Clear();
+
+        rewinding = false;
     }
 
     struct PlayerPosition
