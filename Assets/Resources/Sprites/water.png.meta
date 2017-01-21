@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: 939b12371d199104083d99625c745511
-timeCreated: 1485024314
+guid: d242bbb8eb3a4ab4b9c8a386c840e76e
+timeCreated: 1485025992
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: waves_0
-    21300002: waves_1
-    21300004: waves_2
-    21300006: waves_3
-    21300008: waves_4
+  fileIDToRecycleName: {}
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -35,11 +30,11 @@ TextureImporter:
     filterMode: -1
     aniso: -1
     mipBias: -1
-    wrapMode: 1
+    wrapMode: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -81,72 +76,7 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: waves_0
-      rect:
-        serializedVersion: 2
-        x: 15
-        y: 998
-        width: 41
-        height: 67
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: waves_1
-      rect:
-        serializedVersion: 2
-        x: 81
-        y: 956
-        width: 49
-        height: 110
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: waves_2
-      rect:
-        serializedVersion: 2
-        x: 172
-        y: 912
-        width: 59
-        height: 154
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: waves_3
-      rect:
-        serializedVersion: 2
-        x: 266
-        y: 867
-        width: 68
-        height: 198
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: waves_4
-      rect:
-        serializedVersion: 2
-        x: 359
-        y: 824
-        width: 96
-        height: 242
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
+    sprites: []
     outline: []
   spritePackingTag: 
   userData: 

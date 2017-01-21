@@ -1,14 +1,12 @@
 fileFormatVersion: 2
-guid: 939b12371d199104083d99625c745511
-timeCreated: 1485024314
+guid: 27f30c70e2742434badded1ed69f36fb
+timeCreated: 1485020416
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: waves_0
-    21300002: waves_1
-    21300004: waves_2
-    21300006: waves_3
-    21300008: waves_4
+    21300000: jump_0
+    21300002: jump_1
+    21300004: jump_2
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -83,65 +81,39 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: waves_0
+      name: jump_0
       rect:
         serializedVersion: 2
         x: 15
-        y: 998
-        width: 41
-        height: 67
+        y: 851
+        width: 92
+        height: 214
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: waves_1
+      name: jump_1
       rect:
         serializedVersion: 2
-        x: 81
-        y: 956
-        width: 49
-        height: 110
+        x: 133
+        y: 892
+        width: 184
+        height: 173
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: waves_2
+      name: jump_2
       rect:
         serializedVersion: 2
-        x: 172
-        y: 912
-        width: 59
-        height: 154
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: waves_3
-      rect:
-        serializedVersion: 2
-        x: 266
-        y: 867
-        width: 68
-        height: 198
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: waves_4
-      rect:
-        serializedVersion: 2
-        x: 359
-        y: 824
-        width: 96
-        height: 242
+        x: 342
+        y: 851
+        width: 92
+        height: 214
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

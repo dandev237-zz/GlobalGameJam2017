@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Parallax : MonoBehaviour
 {
-    public float speed = 0.1f;
+    public static float speed = 0.1f;
     private Rect rect;
 
     public void Awake()
