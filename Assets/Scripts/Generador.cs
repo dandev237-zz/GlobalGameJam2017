@@ -45,6 +45,7 @@ public class Generador : MonoBehaviour {
                 //Debug.Log("Obstaculo:" + obstaculos[iobjeto]);
                 var obstaculoA = objetos[iobjeto];
                 //obstaculoA.transform.position = this.transform.position;
+                obstaculoA.SetActive(true);
                 obstaculoA.GetComponent<rrjscrObstaculo>().Reiniciar(this.transform);
                 iobjeto++;
             }
