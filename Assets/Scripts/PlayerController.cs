@@ -12,8 +12,8 @@ public class PlayerController : MonoBehaviour
     {
         _rigidBody = this.GetComponent<Rigidbody2D>();
         _animator = this.GetComponent<Animator>();
-        _armAnimator = GameObject.Find("Ground/Player/arm").GetComponent<Animator>();
-        _wavesAnimator = GameObject.Find("Ground/Player/waves").GetComponent<Animator>();
+        _armAnimator = GameObject.Find("Player/Player/arm").GetComponent<Animator>();
+        _wavesAnimator = GameObject.Find("Player/Player/waves").GetComponent<Animator>();
     }
 
     void Update()
