@@ -36,6 +36,7 @@ public class PlayerRewind : MonoBehaviour {
         else if(!rewinding && !jumping && collision.gameObject.tag.Equals("PickupRewind"))
         {
             Rewind();
+            GameObject.Destroy(collision.gameObject);
         }
     }
 
