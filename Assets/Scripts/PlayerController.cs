@@ -2,9 +2,9 @@
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody2D _rigidBody;
-    private float _force = 5;
-    private bool jump = false;
+    private static Rigidbody2D _rigidBody;
+    private static float _force = 5;
+    private static bool jump = false;
 
     public void Awake()
     {
@@ -15,8 +15,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && !jump)
         {
-            jump = true;
-            _rigidBody.AddForce(Vector2.up * _force, ForceMode2D.Impulse);
+            Jump();
         }
     }
 
@@ -26,5 +25,11 @@ public class PlayerController : MonoBehaviour
         {
             jump = false;
         }
+    }
+
+    public static void Jump()
+    {
+        jump = true;
+        _rigidBody.AddForce(Vector2.up * _force, ForceMode2D.Impulse);
     }
 }
