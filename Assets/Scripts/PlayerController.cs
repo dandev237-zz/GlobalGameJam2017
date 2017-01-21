@@ -66,6 +66,10 @@ public class PlayerController : MonoBehaviour
             GameObject.Find("Background/PanelWin").GetComponent<Animator>().Play("WinScreen");
             finish = true;
         }
+        else if (collision.gameObject.tag.Equals("PickupSpeed"))
+        {
+            //GetComponent<PlayerSpeed>().Invoke("Collission", 0.0f);
+        }
     }
 
     public static void GameOver()
