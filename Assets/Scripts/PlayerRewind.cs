@@ -5,23 +5,44 @@ using UnityEngine;
 public class PlayerRewind : MonoBehaviour {
 
     public GameObject player;
-    public float rewindDistance;
+    public float rewindTime;
+    private float elapsedTime, rewindActivationTime, remainingRewindTime;
     private bool rewinding, jumping;
     private Stack<PlayerPosition> recordedPositions;
 
 	void Start () {
         recordedPositions = new Stack<PlayerPosition>();
+        elapsedTime = 0.0f;
+        rewindActivationTime = 0.0f;
+        rewindTime = 2.0f;
         rewinding = false;
         jumping = false;
 	}
 
     private void Update()
     {
+
         if (!rewinding)
         {
+            elapsedTime += Time.deltaTime;
             if (Input.GetKeyDown(KeyCode.Space) && !jumping)
             {
                 jumping = true;
+            }
+        }
+        else
+        {
+            elapsedTime -= Time.deltaTime * 10;
+            if(elapsedTime <= recordedPositions.Peek().GetTime())
+            {
+                jumping = true;
+                PlayerController.Jump();
+                recordedPositions.Pop();
+            }
+            if(rewindActivationTime - rewindTime >= elapsedTime)
+            {
+                rewinding = false;
+                Parallax.speed = 0.1f;
             }
         }
     }
@@ -31,7 +52,7 @@ public class PlayerRewind : MonoBehaviour {
         if (!rewinding && jumping && collision.gameObject.tag.Equals("Ground"))
         {
             jumping = false;
-            RecordPosition(player.transform, PlayerController.speed);
+            RecordPosition(elapsedTime, Parallax.speed);
         }
         else if(!rewinding && !jumping && collision.gameObject.tag.Equals("PickupRewind"))
         {
@@ -40,73 +61,34 @@ public class PlayerRewind : MonoBehaviour {
         }
     }
 
-    private void RecordPosition(Transform playerTransform, float playerSpeed)
+    private void RecordPosition(float jumpTime, float playerSpeed)
     {
-        PlayerPosition positionToRecord = new PlayerPosition(playerTransform, playerSpeed);
+        PlayerPosition positionToRecord = new PlayerPosition(jumpTime, playerSpeed);
         recordedPositions.Push(positionToRecord);
     }
 
     private void Rewind()
     {
         rewinding = true;
+        rewindActivationTime = elapsedTime;
 
-        bool keepLooking = true;
-        float distanceRewinded = 0.0f;
-
-        if(recordedPositions.Count > 0)
-        {
-            while (recordedPositions.Count > 0 && keepLooking)
-            {
-                PlayerPosition recordedPosition = recordedPositions.Pop();
-                if (recordedPosition.GetPosition().x < player.transform.position.x - (rewindDistance - distanceRewinded))
-                {
-                    //The point is farther away than the rewind distance we have left
-                    keepLooking = false;
-
-                    player.transform.Translate(new Vector2(player.transform.position.x - (rewindDistance - distanceRewinded), 0.0f) * Time.deltaTime); //CONSIDER SPEED
-                }
-                else
-                {
-                    //Store the distance we are about to rewind
-                    distanceRewinded += player.transform.position.x - recordedPosition.GetPosition().x;
-
-                    //Create rewind vector
-                    Vector2 rewindVector = new Vector2(player.transform.position.x - recordedPosition.GetPosition().x, player.transform.position.y);
-
-                    //Translate the player
-                    player.transform.Translate(rewindVector * Time.deltaTime * recordedPosition.GetSpeed()); //CONSIDER SPEED
-
-                    //Issue a jump command
-                    PlayerController.Jump();
-                }
-            }
-        }
-        else
-        {
-            //Move player in a straight line towards the maximum possible distance
-            player.transform.Translate(new Vector2(player.transform.position.x - rewindDistance, 0.0f) * Time.deltaTime); //CONSIDER SPEED
-        }
-
-        //Empty the stack
-        recordedPositions.Clear();
-
-        rewinding = false;
+        Parallax.speed = -1f;
     }
 
     struct PlayerPosition
     {
-        Vector2 position;
+        float time;
         float speed;
 
-        public PlayerPosition(Transform playerTransform, float playerSpeed)
+        public PlayerPosition(float jumpTime, float playerSpeed)
         {
-            position = playerTransform.position;
+            time = jumpTime;
             speed = playerSpeed;
         }
 
-        public Vector2 GetPosition()
+        public float GetTime()
         {
-            return position;
+            return time;
         }
 
         public float GetSpeed()
