@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Generador : MonoBehaviour {
-    GameObject obstaculo;
+    public GameObject obstaculo;
     public int nobjetos = 6;
     private int segundos = 1;
     private List<GameObject> obstaculos, objetos;
@@ -28,27 +28,36 @@ public class Generador : MonoBehaviour {
         objetos = new List<GameObject>();
        for(int i = 0; i < nobjetos; i++)
         {
-            obstaculo = (GameObject)Resources.Load("prefabs/rrjobstaculo");
+            //obstaculo = (GameObject)Resources.Load("prefabs/rrjobstaculo");
             obstaculos.Add(obstaculo);
             //obstaculos.Add((GameObject)Resources.Load("prefabs/rrjobstaculo"));
         }
     }
 
-    private void AparecerObstaculo() { 
-        if (instanciados) {
-            //Mover al principio
-            //Debug.Log("Todos instanciados");
-            //Debug.Log("iobjetos: " + iobjeto);
-            //Debug.Log("Obstaculo:" + obstaculos[iobjeto]);
-            var obstaculoA = objetos[iobjeto];
-            //obstaculoA.transform.position = this.transform.position;
-            obstaculoA.GetComponent<rrjscrObstaculo>().Reiniciar(this.transform);
-            iobjeto++;
-        } else {
-            objetos.Add( Instantiate(obstaculos[iobjeto]));
-            iobjeto++;
-            if (iobjeto == nobjetos) {
-                instanciados = true;
+    private void AparecerObstaculo() {
+        if (Random.Range(0, 101) >= 75)
+        {
+            if (instanciados)
+            {
+                //Mover al principio
+                //Debug.Log("Todos instanciados");
+                //Debug.Log("iobjetos: " + iobjeto);
+                //Debug.Log("Obstaculo:" + obstaculos[iobjeto]);
+                var obstaculoA = objetos[iobjeto];
+                //obstaculoA.transform.position = this.transform.position;
+                obstaculoA.GetComponent<rrjscrObstaculo>().Reiniciar(this.transform);
+                iobjeto++;
+            }
+            else
+            {
+                GameObject objeto = Instantiate(obstaculos[iobjeto]);
+                objeto.GetComponent<rrjscrObstaculo>().Reiniciar(this.transform);
+                objetos.Add(objeto);
+                iobjeto++;
+                if (iobjeto == nobjetos)
+                {
+                    instanciados = true;
+                }
             }
         }
         if (iobjeto == nobjetos)
