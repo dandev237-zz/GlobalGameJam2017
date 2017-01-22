@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     private static float timer { get; set; }
     private static Animator _animator, _armAnimator, _wavesAnimator;
     private static Sprite _sprite;
-    private static GameObject backgroundPanelWin, panelCredits;
+    private static GameObject backgroundPanelWin, panelCredits, _background;
     private bool finished;
     private int life;
 
@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
         _armAnimator = GameObject.Find("Player/Player/arm").GetComponent<Animator>();
         _wavesAnimator = GameObject.Find("Player/Player/waves").GetComponent<Animator>();
         _sprite = (Sprite)Resources.Load<Sprite>("Sprites/gameOver");
+        _background = GameObject.Find("Background");
         backgroundPanelWin = GameObject.Find("Background/PanelWin");
         panelCredits = GameObject.Find("Background/PanelCredits");
         panelCredits.SetActive(false);
@@ -70,8 +71,10 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        
         if (collision.tag.Equals("disco"))
         {
+            PutBackgroundInFront();
             Destroy(collision.gameObject);
             backgroundPanelWin.SetActive(true);
             backgroundPanelWin.GetComponent<Animator>().Play("WinScreen");
@@ -84,6 +87,7 @@ public class PlayerController : MonoBehaviour
             if (life <= 0 && !finished)
             {
                 finished = true;
+                PutBackgroundInFront();
                 GameOver();
             }
         }
@@ -110,5 +114,10 @@ public class PlayerController : MonoBehaviour
     public void LoadMain()
     {
         SceneManager.LoadScene("Main");
+    }
+
+    private void PutBackgroundInFront()
+    {
+        _background.GetComponent<Canvas>().sortingOrder = 999;
     }
 }
