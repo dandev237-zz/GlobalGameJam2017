@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision.tag.Equals("disco"))
         {
+            GameObject.Find("MusicLoader").GetComponent<MusicLoader>().Stop();
             PutBackgroundInFront();
             Destroy(collision.gameObject);
             backgroundPanelWin.SetActive(true);
@@ -74,7 +75,7 @@ public class PlayerController : MonoBehaviour
             Invoke("ShowCredits", 5);
             finish = true;
         }
-        else if (collision.tag.Equals("Enemy"))
+        else if (collision.tag.Equals("Enemy") || collision.tag.Equals("High") || collision.tag.Equals("Low"))
         {
             life--;
             if (life <= 0 && !finished)
@@ -97,6 +98,7 @@ public class PlayerController : MonoBehaviour
 
     public void GameOver()
     {
+        GameObject.Find("MusicLoader").GetComponent<MusicLoader>().Stop();
         backgroundPanelWin.SetActive(true);
         backgroundPanelWin.GetComponent<Image>().sprite = _sprite;
         backgroundPanelWin.GetComponent<Animator>().Play("WinScreen");

@@ -1,26 +1,24 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Audio;
 
 public class AudioController : MonoBehaviour
 {
-    public event FrequencyEvent OnLowFrequency;
-    public event FrequencyEvent OnHighFrequency;
-
-    public delegate void FrequencyEvent();
-
     public float noisePercentageNeeded = 0F;
-    public int samples = 0, lowFrequency = 0, highFrequency = 0;
+    public int lowFrequency = 0, highFrequency = 0;
 
     public AudioMixer mixer;
     public AudioSource source;
 
-    private int sampleRate;
+    private int sampleRate, samples;
     private float noise, pitch;
     private float[] data, spectrum;
+    private List<GameObject> high, low;
 
     // Use this for initialization
-    void Start () {
-        if (samples == 0) samples = 1024;
+    void Start()
+    {
+        samples = 1024;
         if (lowFrequency == 0) lowFrequency = 40;
         if (highFrequency == 0) highFrequency = 400;
         if (noisePercentageNeeded < 0F || noisePercentageNeeded > 100F) noisePercentageNeeded = 30F;
@@ -31,6 +29,8 @@ public class AudioController : MonoBehaviour
         source.loop = true;
         while (Microphone.GetPosition(null) <= 0) ;
         source.Play();
+        high = new List<GameObject>();
+        low = new List<GameObject>();
     }
 
     void OnDestroy()
@@ -39,18 +39,39 @@ public class AudioController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         Analyze();
         if (noise >= noisePercentageNeeded && pitch >= lowFrequency && pitch < highFrequency)
         {
-            FrequencyEvent handler = OnLowFrequency;
-            if (handler != null) handler();
+            PlayerController.Scream();
+            foreach(GameObject go in low)
+            {
+                Destroy(go);
+            }
+            low.Clear();
         }
         else if (noise >= noisePercentageNeeded && pitch >= highFrequency)
         {
-            FrequencyEvent handler = OnHighFrequency;
-            if (handler != null) handler();
+            PlayerController.Scream();
+            foreach (GameObject go in high)
+            {
+                Destroy(go);
+            }
+            high.Clear();
         }
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag.Equals("High")) high.Add(collision.gameObject);
+        else if (collision.tag.Equals("Low")) low.Add(collision.gameObject);
+    }
+
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag.Equals("High")) high.Remove(collision.gameObject);
+        else if (collision.tag.Equals("Low")) low.Remove(collision.gameObject);
     }
 
     /// <summary>

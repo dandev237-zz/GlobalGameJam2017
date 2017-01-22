@@ -5,12 +5,13 @@ using UnityEngine;
 public class Generador : MonoBehaviour
 {
     private int nobjetos;
-    private int segundos = 1;
+    private float segundos = 1;
     public List<GameObject> obstaculos/*, objetos*/;
     public bool ground = false;
     private bool instanciados = false, finish = false;
     private int iobjeto = 0;
     private GameObject disco;
+    private float totalLength;
 
     // Use this for initialization
     void Start()
@@ -24,23 +25,19 @@ public class Generador : MonoBehaviour
     {
         //objetos = new List<GameObject>();
         disco = (GameObject)Resources.Load("prefabs/Disco");
+        totalLength = GameObject.Find("MusicLoader").GetComponent<MusicLoader>().Length;
+    }
+
+    void Update()
+    {
+        segundos += Time.deltaTime;
     }
 
     private void AparecerObstaculo()
     {
         if (Random.Range(0, 101) >= 30)
         {
-            //if (instanciados)
-            //{
-            //    int rnd = Random.Range(0, obstaculos.Count);
-            //    var obstaculoA = objetos[rnd];
-            //    obstaculoA.SetActive(true);
-            //    obstaculoA.GetComponent<rrjscrObstaculo>().Reiniciar(this.transform);
-            //    iobjeto++;
-            //}
-            //else
-            //{
-            if (iobjeto < 5)
+            if (totalLength - segundos > 5)
             {
                 int rnd = Random.Range(0, obstaculos.Count);
                 var obj = Instantiate(obstaculos[rnd]);
@@ -63,20 +60,7 @@ public class Generador : MonoBehaviour
                     finish = true;
                 }
             }
-            //GameObject objeto = Instantiate(obstaculos[iobjeto]);
-            //objeto.GetComponent<rrjscrObstaculo>().Reiniciar(this.transform);
-            //objetos.Add(objeto);
-            // iobjeto++;
-            //if (iobjeto - 1 == nobjetos)
-            //{
-            //    instanciados = true;
-            //}
-            // }
         }
-        //if (iobjeto == nobjetos)
-        //{
-        //    iobjeto = 0;
-        //}
         //Cambiamos el flag para hacer aparecer un obstaculo
         Invoke("AparecerObstaculo", segundos);
     }

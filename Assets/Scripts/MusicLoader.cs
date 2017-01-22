@@ -15,14 +15,20 @@ public struct DirsFilesLists
 public class MusicLoader : MonoBehaviour
 {
 
-    public event MusicEvent MusicLoaded;
-    public delegate void MusicEvent(string error, AudioClip clip);
+    public event ErrorEvent MusicError;
+    public delegate void ErrorEvent(string error);
 
     public IWavePlayer player = new WaveOutEvent();
+    public float Length
+    {
+        get
+        {
+            return stream != null ? (float) stream.TotalTime.TotalSeconds : 0;
+        }
+    }
 
     private WaveStream stream;
     private WaveChannel32 channel;
-    private AudioClip clip;
     private MemoryStream mms;
 
     void Awake()
@@ -34,21 +40,19 @@ public class MusicLoader : MonoBehaviour
     {
         player.Stop();
         player.Dispose();
-        channel.Dispose();
-        stream.Dispose();
+    }
+
+    public void Stop()
+    {
+        if (player.PlaybackState == PlaybackState.Playing) player.Pause();
+        channel.Seek(0, SeekOrigin.Begin);
     }
 
     private void LevelLoaded(Scene game, LoadSceneMode mode)
     {
         if (game.name.Equals("Game"))
         {
-            if (player.PlaybackState == PlaybackState.Playing) player.Pause();
-            channel.Seek(0, SeekOrigin.Begin);
-            MusicEvent handler = MusicLoaded;
-            if (handler != null)
-            {
-                handler(null, clip);
-            }
+            Stop();
             player.Play();
         }
     }
@@ -74,17 +78,17 @@ public class MusicLoader : MonoBehaviour
         while (!trackFile.isDone) yield return trackFile;
         if (!string.IsNullOrEmpty(trackFile.error))
         {
-            MusicEvent handler = MusicLoaded;
+            ErrorEvent handler = MusicError;
             if (handler != null)
             {
-                handler(trackFile.error, null);
+                handler(trackFile.error);
                 yield break;
             }
         }
-        clip = trackFile.audioClip;
 
         string error = null;
         byte[] data = trackFile.bytes;
+        if (channel != null) channel.Dispose();
         try
         {
             mms = new MemoryStream(data);
@@ -98,10 +102,10 @@ public class MusicLoader : MonoBehaviour
             error = e.ToString();
         }
         {
-            MusicEvent handler = MusicLoaded;
+            ErrorEvent handler = MusicError;
             if (handler != null)
             {
-                handler(error, trackFile.audioClip);
+                handler(error);
             }
         }
     }

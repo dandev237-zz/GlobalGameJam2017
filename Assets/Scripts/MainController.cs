@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -27,7 +24,7 @@ public class MainController : MonoBehaviour
         }
         else loader = music.GetComponent<MusicLoader>();
 
-        loader.MusicLoaded += OnMusicError;
+        loader.MusicError += OnMusicError;
 
         panelMain = GameObject.Find("Canvas/PanelMain");
         panelHow = GameObject.Find("Canvas/PanelHowToPlay");
@@ -42,7 +39,7 @@ public class MainController : MonoBehaviour
                 errorMsg.color = Color.cyan;
                 return;
             }
-            loader.player.Pause();
+            loader.Stop();
             panelSong.SetActive(false);
             panelHow.SetActive(true);
             Invoke("LoadSceneGame", 5);
@@ -86,10 +83,10 @@ public class MainController : MonoBehaviour
 
     private void OnDestroy()
     {
-        loader.MusicLoaded -= OnMusicError;
+        loader.MusicError -= OnMusicError;
     }
 
-    public void OnMusicError(string error, AudioClip clip)
+    public void OnMusicError(string error)
     {
         if (error != null)
         {
