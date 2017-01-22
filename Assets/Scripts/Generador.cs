@@ -35,7 +35,7 @@ public class Generador : MonoBehaviour
 
     private void AparecerObstaculo()
     {
-        if (Random.Range(0, 101) >= 30)
+        if (Random.Range(0, 101) > 1)
         {
             if (totalLength - segundos > 5)
             {
