@@ -4,8 +4,8 @@ using UnityEngine.Audio;
 
 public class AudioController : MonoBehaviour
 {
-    public float noisePercentageNeeded = 0F;
-    public int lowFrequency = 0, highFrequency = 0;
+    private float dbNeeded = 0F;
+    private int lowFrequency = 0, highFrequency = 0;
 
     public AudioMixer mixer;
     public AudioSource source;
@@ -19,9 +19,9 @@ public class AudioController : MonoBehaviour
     void Start()
     {
         samples = 1024;
-        if (lowFrequency == 0) lowFrequency = 40;
-        if (highFrequency == 0) highFrequency = 400;
-        if (noisePercentageNeeded < 0F || noisePercentageNeeded > 100F) noisePercentageNeeded = 30F;
+        lowFrequency = 40;
+        highFrequency = 400;
+        dbNeeded = -10F;
         sampleRate = AudioSettings.outputSampleRate;
         data = new float[samples];
         spectrum = new float[samples];
@@ -42,8 +42,7 @@ public class AudioController : MonoBehaviour
     void Update()
     {
         Analyze();
-        Debug.Log(noise);
-        if (noise >= noisePercentageNeeded && pitch >= lowFrequency && pitch < highFrequency)
+        if (noise >= dbNeeded && pitch >= lowFrequency && pitch < highFrequency)
         {
             PlayerController.Scream();
             foreach(GameObject go in low)
@@ -52,7 +51,7 @@ public class AudioController : MonoBehaviour
             }
             low.Clear();
         }
-        else if (noise >= noisePercentageNeeded && pitch >= highFrequency)
+        else if (noise >= dbNeeded && pitch >= highFrequency)
         {
             PlayerController.Scream();
             foreach (GameObject go in high)
@@ -87,7 +86,9 @@ public class AudioController : MonoBehaviour
         {
             sum += Mathf.Pow(data[i], 2);
         }
-        noise = Mathf.Sqrt(sum / samples) * 100;
+        noise = Mathf.Sqrt(sum / samples);
+        noise = 20 * Mathf.Log10(noise / 0.1F);
+        Debug.Log(noise);
 
         // Get pitch
         source.GetSpectrumData(spectrum, 0, FFTWindow.BlackmanHarris);
