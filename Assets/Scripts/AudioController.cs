@@ -42,6 +42,7 @@ public class AudioController : MonoBehaviour
     void Update()
     {
         Analyze();
+        Debug.Log(noise);
         if (noise >= noisePercentageNeeded && pitch >= lowFrequency && pitch < highFrequency)
         {
             PlayerController.Scream();

@@ -18,7 +18,7 @@ public class MusicLoader : MonoBehaviour
     public event ErrorEvent MusicError;
     public delegate void ErrorEvent(string error);
 
-    public IWavePlayer player = new WaveOutEvent();
+    public IWavePlayer player;
     public float Length
     {
         get
@@ -38,8 +38,11 @@ public class MusicLoader : MonoBehaviour
 
     public void OnDestroy()
     {
-        player.Stop();
-        player.Dispose();
+        if (player != null)
+        {
+            player.Stop();
+            player.Dispose();
+        }
     }
 
     public void Stop()
@@ -88,12 +91,13 @@ public class MusicLoader : MonoBehaviour
 
         string error = null;
         byte[] data = trackFile.bytes;
-        if (channel != null) channel.Dispose();
+        if (player != null) player.Dispose();
         try
         {
             mms = new MemoryStream(data);
             stream = new Mp3FileReader(mms);
             channel = new WaveChannel32(stream);
+            player = new WaveOutEvent();
             player.Init(channel);
             player.Play();
         }
