@@ -35,32 +35,30 @@ public class Generador : MonoBehaviour
 
     private void AparecerObstaculo()
     {
-        if (Random.Range(0, 101) > 1)
+        if (totalLength - segundos > 5)
         {
-            if (totalLength - segundos > 5)
+            int rnd = Random.Range(0, obstaculos.Count);
+            var obj = Instantiate(obstaculos[rnd]);
+            if (ground)
             {
-                int rnd = Random.Range(0, obstaculos.Count);
-                var obj = Instantiate(obstaculos[rnd]);
-                if (ground)
-                {
-                    obj.GetComponent<rrjscrObstaculo>().Reiniciar(this.transform);
-                }
-                else
-                {
-                    obj.GetComponent<Objects>().Shoot(this.transform);
-                }
-                iobjeto++;
+                obj.GetComponent<rrjscrObstaculo>().Reiniciar(this.transform);
             }
             else
             {
-                if (ground && !finish)
-                {
-                    var discoObj = Instantiate(disco);
-                    discoObj.GetComponent<rrjscrObstaculo>().Reiniciar(this.transform);
-                    finish = true;
-                }
+                obj.GetComponent<Objects>().Shoot(this.transform);
+            }
+            iobjeto++;
+        }
+        else
+        {
+            if (ground && !finish)
+            {
+                var discoObj = Instantiate(disco);
+                discoObj.GetComponent<rrjscrObstaculo>().Reiniciar(this.transform);
+                finish = true;
             }
         }
+
         //Cambiamos el flag para hacer aparecer un obstaculo
         Invoke("AparecerObstaculo", segundos);
     }
