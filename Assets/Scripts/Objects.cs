@@ -3,8 +3,8 @@
 public class Objects : MonoBehaviour
 {
 
-    public float forceUp = 200;
-    public float forceLeft = 500;
+    private float forceUp = 200;
+    private float forceLeft = 1000;
     private Rigidbody2D _rigidBody;
     public Sprite _sprite;
     private SpriteRenderer _rend;
@@ -12,12 +12,21 @@ public class Objects : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        _rigidBody = GetComponent<Rigidbody2D>();
         _rend = GetComponent<SpriteRenderer>();
+        Invoke("Delete", 10);
+
     }
 
-    public void Shoot()
+
+    private void Delete()
     {
+        Destroy(this.gameObject);
+    }
+
+    public void Shoot(Transform transform)
+    {
+        this.transform.position = transform.position;
+        _rigidBody = GetComponent<Rigidbody2D>();
         _rigidBody.AddForce(Vector2.up * forceUp);
         _rigidBody.AddForce(Vector2.left * forceLeft);
     }

@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     private static float timer { get; set; }
     private static Animator _animator, _armAnimator, _wavesAnimator;
     private static Sprite _sprite;
+    private static GameObject backgroundPanelWin, panelCredits;
+    private bool finished;
+    private int life;
 
     public void Awake()
     {
@@ -18,7 +21,13 @@ public class PlayerController : MonoBehaviour
         _animator = this.GetComponent<Animator>();
         _armAnimator = GameObject.Find("Player/Player/arm").GetComponent<Animator>();
         _wavesAnimator = GameObject.Find("Player/Player/waves").GetComponent<Animator>();
-        _sprite = (Sprite)Resources.Load("Sprites/GameOver");
+        _sprite = (Sprite)Resources.Load<Sprite>("Sprites/gameOver");
+        backgroundPanelWin = GameObject.Find("Background/PanelWin");
+        panelCredits = GameObject.Find("Background/PanelCredits");
+        panelCredits.SetActive(false);
+        backgroundPanelWin.SetActive(false);
+        finished = false;
+        life = 3;
     }
 
     void Update()
@@ -59,27 +68,46 @@ public class PlayerController : MonoBehaviour
         _wavesAnimator.Play("waves");
     }
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag.Equals("disco"))
         {
-            GameObject.Find("Background/PanelWin").GetComponent<Animator>().Play("WinScreen");
+            Destroy(collision.gameObject);
+            backgroundPanelWin.SetActive(true);
+            backgroundPanelWin.GetComponent<Animator>().Play("WinScreen");
+            Invoke("ShowCredits", 3);
             finish = true;
         }
-        else if (collision.gameObject.tag.Equals("PickupSpeed"))
+        else if (collision.tag.Equals("Enemy"))
         {
-            //GetComponent<PlayerSpeed>().Invoke("Collission", 0.0f);
+            life--;
+            if (life <= 0 && !finished)
+            {
+                finished = true;
+                GameOver();
+            }
         }
     }
 
-    public static void GameOver()
+    public void ShowCredits()
     {
-        GameObject.Find("Background/PanelWin").GetComponent<Image>().sprite = _sprite;
-        GameObject.Find("Background/PanelWin").GetComponent<Animator>().Play("WinScreen");
-        finish = true;
+        panelCredits.SetActive(true);
+        panelCredits.GetComponent<Animator>().Play("credits");
+        backgroundPanelWin.SetActive(false);
+        Invoke("LoadMain", 3);
     }
 
-    public static void LoadMain()
+
+    public void GameOver()
+    {
+        backgroundPanelWin.SetActive(true);
+        backgroundPanelWin.GetComponent<Image>().sprite = _sprite;
+        backgroundPanelWin.GetComponent<Animator>().Play("WinScreen");
+        finish = true;
+        Invoke("ShowCredits", 3);
+    }
+
+    public void LoadMain()
     {
         SceneManager.LoadScene("Main");
     }
