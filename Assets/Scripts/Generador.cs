@@ -60,6 +60,6 @@ public class Generador : MonoBehaviour
         }
 
         //Cambiamos el flag para hacer aparecer un obstaculo
-        Invoke("AparecerObstaculo", segundos);
+        Invoke("AparecerObstaculo", 3);
     }
 }
